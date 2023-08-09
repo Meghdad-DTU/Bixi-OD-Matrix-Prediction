@@ -1,0 +1,15 @@
+tensorflow
+boto3
+pandas
+numpy
+matplotlib
+notebook
+dvc
+python-box == 6.0.2
+pyYAML
+tqdm
+ensure==1.0.2
+joblib
+types-pyYAML
+scikit-learn
+-e .
