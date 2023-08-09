@@ -120,7 +120,7 @@ celerybeat.pid
 *.sage.py
 
 # aws credentials
-config/secrets.yaml
+secrets.yaml
 
 # Environments
 .env
