@@ -8,7 +8,7 @@ Dynamic Origin-Destination (OD) matrix prediction for bike-sharing in Montreal b
 ![Screenshot](images/image2.png)
 
 ### Zone examples:
-76 zones in total 
+64 unique zones in total 
 ![Screenshot](images/image1.png)
 
 ### Workflows

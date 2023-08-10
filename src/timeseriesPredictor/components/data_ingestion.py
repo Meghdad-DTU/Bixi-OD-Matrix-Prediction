@@ -21,7 +21,8 @@ class DataIngestion:
             csv_obj = self.client.get_object(Bucket=self.config.s3_bucket, Key=self.config.object_key)
             body = csv_obj['Body']
             csv_string = body.read().decode('utf-8')
-            df = pd.read_csv(StringIO(csv_string))
+            df = pd.read_csv(StringIO(csv_string))            
+            
             df.to_csv(self.config.local_data_file, index=False, header=True)
             logging.info(f'{self.config.local_data_file} is downloaded!')            
 

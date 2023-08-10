@@ -2,7 +2,8 @@ import os
 import sys
 import yaml
 
-
+import numpy as np
+import pandas as pd
 from timeseriesPredictor.logger import logging
 from timeseriesPredictor.exception import CustomException
 
@@ -59,3 +60,107 @@ def get_size(path: Path) -> str:
     """
     size_in_kb = round(os.path.getsize(path)/1024)
     return f"~ {size_in_kb} KB"
+
+
+
+def resampling(dat, tensor, window="1D"):
+    """
+    Resampling O-D daily, hourly or 15 mins
+    Args:
+        dat (DataFrame): Bixi dataframe including origin and distnation
+        tensor (Boolean): if true it relates to tensor matrix else OD matrix
+        window (str): time windows (1D, 60Min & 15Min)
+
+    """ 
+    if tensor:
+        dat = dat.loc[:,["start_date","ki","kj"]].set_index("start_date")    
+        dat["freq"] = np.repeat(1, len(dat))
+        resampled_dat = dat.groupby([pd.Grouper(freq= window),"ki","kj"]).aggregate(np.sum).reset_index()
+
+    else:
+        dat = dat.loc[:,["start_date","zone_O","zone_D"]].set_index("start_date")    
+        dat["freq"] = np.repeat(1, len(dat))
+        resampled_dat = dat.groupby([pd.Grouper(freq= window),"zone_O","zone_D"]).aggregate(np.sum).reset_index()
+    
+    return resampled_dat  
+
+
+def time_window_matrix(dat, n_origin, n_dist=None):
+    """
+    Creating O-D Matrix or tensor for each time window
+    Args:
+        dat (DataFrame: sub dataset for each timestamp
+        n_origin (int): total number of origins
+        n_dist (int): if not None, total number of distinations
+    """
+    if n_dist is not None:
+        arr_org = np.arange(n_origin)
+        arr_dis = np.arange(n_dist)
+        origin, destination = arr_org.repeat(n_dist), np.tile(arr_dis,n_origin)
+        columns = ["ki","kj"]
+        o_size, d_size = n_origin, n_dist
+    else:
+        arr = np.arange(n_origin)
+        origin, destination = arr.repeat(n_origin), np.tile(arr,n_origin)
+        columns = ["zone_O","zone_D"]
+        o_size, d_size = n_origin, n_origin        
+
+    df1 = pd.DataFrame(np.vstack([origin, destination]).T)
+    df1.columns = columns
+    df2 = dat.loc[:,columns]
+    # Find Rows in df1 Which Are Not Available in df2
+    merge_df = df1.merge(df2, how = 'outer' ,indicator=True)
+    
+    freq = dat['freq'].values
+    
+    i=0
+    trips = []
+    for x in merge_df._merge.values:
+        if x!= "both":
+            trips.append(0)
+        else:
+            trips.append(freq[i])
+            i+=1
+    channel=1
+
+    matrix=np.array(trips).reshape(o_size, d_size, channel) 
+    return matrix
+
+
+def OD_tensor_matrix(dat, tensor=False):  
+    """
+    Creating O-D Matrix or tensor for whole datset
+    Args:
+        dat (DataFrame): Bixi dataframe including origin and distnation
+        tensor (Boolean): if true it creates tensor matrix        
+    """
+    if tensor:
+        n_origin =  len(np.unique(dat.ki.values)) 
+        n_dist = len(np.unique(dat.kj.values))
+        o_size, d_size = n_origin, n_dist         
+
+    else:
+        n_origin =  len(np.unique(dat.zone_O.values))
+        n_dist = None 
+        o_size, d_size = n_origin, n_origin
+            
+    res_dat = resampling(dat, tensor)
+    timestamp = np.unique(res_dat.start_date)        
+    channel=1   
+    OD_tensor_matrix = np.empty((len(timestamp), o_size, d_size, channel))
+    for i, ts in enumerate(timestamp):
+        df = res_dat[res_dat.start_date==ts]
+        mat = time_window_matrix(df, n_origin, n_dist)
+        OD_tensor_matrix[i] = mat
+    return OD_tensor_matrix
+
+def train_validation_test(matrix, train_test_ratio, train_val_ratio):
+    lenght = len(matrix)
+    test_inital = int(train_test_ratio*lenght)    
+    val_inital = test_inital - int(train_val_ratio*test_inital)
+
+    matrix_train = matrix[:val_inital]
+    matrix_val = matrix[val_inital:test_inital]
+    matrix_test = matrix[test_inital:]
+
+    return matrix_train, matrix_val, matrix_test
