@@ -7,12 +7,12 @@ data_ingestion:
 
 data_transformation:
   root_dir: artifacts/data_transformation  
-  local_train_OD_dir: artifacts/data_transformation/OD/train
-  local_val_OD_dir: artifacts/data_transformation/OD/validation
-  local_test_OD_dir: artifacts/data_transformation/OD/test
-  local_train_tensor_dir: artifacts/data_transformation/tensor/train
-  local_val_tensor_dir: artifacts/data_transformation/tensor/validation
-  local_test_tensor_dir: artifacts/data_transformation/tensor/test
+  local_train_od_dir: artifacts/data_transformation/od/train.pkl  
+  local_test_od_dir: artifacts/data_transformation/od/test.pkl
+  local_scaler_od_dir: artifacts/data_transformation/od/scaler.pkl
+  local_train_tensor_dir: artifacts/data_transformation/tensor/train.pkl 
+  local_test_tensor_dir: artifacts/data_transformation/tensor/test.pkl
+  local_scaler_tensor_dir: artifacts/data_transformation/tensor/scaler.pkl
 
 
 prepare_autoencoder_base_model:
@@ -24,5 +24,11 @@ prepare_callbacks:
   root_dir: artifacts/prepare_callbacks
   tensorboard_root_log_dir: artifacts/prepare_callbacks/tensorboard_log_dir
   ckeckpoint_model_filepath: artifacts/prepare_callbacks/checkpoint_dir/model.h5
+
+training_autoencoder:
+  root_dir: artifacts/training_autoencoder
+  trained_od_model_path: artifacts/training_autoencoder/od_model.h5
+  trained_tensor_model_path: artifacts/training_autoencoder/tensor_model.h5
+
 
 

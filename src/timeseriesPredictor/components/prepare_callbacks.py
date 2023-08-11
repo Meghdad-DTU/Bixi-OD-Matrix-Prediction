@@ -1,4 +1,4 @@
-import sys
+import os
 from timeseriesPredictor.config.configuration import PrepareCallbacksConfig
 import keras
 import time

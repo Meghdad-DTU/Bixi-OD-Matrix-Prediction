@@ -14,12 +14,12 @@ class DataIngestionConfig:
 class DataTransformationConfig:
     root_dir: Path
     local_data_file: Path 
-    local_train_OD_dir: Path
-    local_val_OD_dir: Path
-    local_test_OD_dir: Path
-    local_train_tensor_dir: Path
-    local_val_tensor_dir: Path
+    local_train_od_dir: Path       
+    local_test_od_dir: Path
+    local_scaler_od_dir: Path 
+    local_train_tensor_dir: Path   
     local_test_tensor_dir: Path
+    local_scaler_tensor_dir: Path
 
 @dataclass
 class PrepareAutoencoderBaseModelConfig:

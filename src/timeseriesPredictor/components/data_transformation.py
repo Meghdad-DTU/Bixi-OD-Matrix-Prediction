@@ -6,10 +6,10 @@ from box import ConfigBox
 
 from sklearn.preprocessing import FunctionTransformer
 from sklearn.pipeline import Pipeline
-from keras.preprocessing.image import save_img
+from sklearn.preprocessing import StandardScaler
 
 from timeseriesPredictor.config.configuration import DataTransformationConfig
-from timeseriesPredictor.utils import OD_tensor_matrix, train_validation_test
+from timeseriesPredictor.utils import OD_tensor_matrix, OD_tensor_matrix, train_test_split, save_pickle
 from timeseriesPredictor.exception import CustomException
 from timeseriesPredictor.logger import logging
 
@@ -25,7 +25,7 @@ class DataTransformation:
                     ('matrix_creation', 
                     FunctionTransformer(OD_tensor_matrix)),
                     ('train_val_test_split', 
-                      FunctionTransformer(train_validation_test, kw_args={'train_test_ratio':0.75, 'train_val_ratio':0.15}))
+                      FunctionTransformer(train_test_split, kw_args={'train_test_ratio':0.75}))
                 ]
             )
 
@@ -34,7 +34,7 @@ class DataTransformation:
                     ('matrix_creation', 
                     FunctionTransformer(OD_tensor_matrix, kw_args={'tensor': True})),
                     ('train_val_test_split', 
-                      FunctionTransformer(train_validation_test, kw_args={'train_test_ratio':0.75, 'train_val_ratio':0.15}))
+                      FunctionTransformer(train_test_split, kw_args={'train_test_ratio':0.75}))
                 ]
             )
             return  ConfigBox({'OD_matrix_pipeline': OD_matrix_pipeline, 
@@ -59,43 +59,27 @@ class DataTransformation:
             preprocessing_obj = self.get_data_transformer_object()  
 
             logging.info(f"Applying OD preprocessing object on dataframe")
-            matrix_train, matrix_val, matrix_test = preprocessing_obj.OD_matrix_pipeline.fit_transform(df)
-
+            matrix_train, matrix_test = preprocessing_obj.OD_matrix_pipeline.fit_transform(df)             
+            scaler = StandardScaler()
+            l, m, n , c = matrix_train.shape
+            scaled_matrix_train = scaler.fit_transform(matrix_train.reshape(l, m*n)).reshape(l, m, n , c) 
+            l, m, n , c = matrix_test.shape
+            scaled_matrix_test = scaler.transform(matrix_test.reshape(l, m*n)).reshape(l, m, n , c)
             
-            for i, matrix in enumerate(matrix_train):                
-                path_file = os.path.join(self.config.local_train_OD_dir, str(i)+'.png')
-                save_img(path_file, matrix)            
-            logging.info(f"Train OD set is saved as .png")   
-
-            leght= len(matrix_train)
-            for i, matrix in enumerate(matrix_val):                
-                path_file = os.path.join(self.config.local_val_OD_dir, str(leght+i)+'.png')
-                save_img(path_file, matrix)            
-            logging.info(f"Validation OD set is saved as .png")  
-
-            leght= len(matrix_train) + len(matrix_val)
-            for i, matrix in enumerate(matrix_test):                
-                path_file = os.path.join(self.config.local_test_OD_dir, str(leght+i)+'.png')
-                save_img(path_file, matrix)            
-            logging.info(f"Test OD set is saved as .png") 
+            save_pickle(path= self.config.local_train_od_dir, obj= scaled_matrix_train)
+            save_pickle(path = self.config.local_test_od_dir, obj= scaled_matrix_test)
+            save_pickle(path= self.config.local_scaler_od_dir, obj= scaler)               
   
 
             logging.info(f"Applying tensor preprocessing object on dataframe")
-            matrix_train, matrix_val, matrix_test = preprocessing_obj.tensor_matrix_pipeline.fit_transform(df)
-            
-            for i, matrix in enumerate(matrix_train):                
-                path_file = os.path.join(self.config.local_train_tensor_dir, str(i)+'.png')
-                save_img(path_file, matrix)            
-            logging.info(f"Train tensor set is saved as .png")   
-
-            leght= len(matrix_train)
-            for i, matrix in enumerate(matrix_val):                
-                path_file = os.path.join(self.config.local_val_tensor_dir, str(leght+i)+'.png')
-                save_img(path_file, matrix)            
-            logging.info(f"Validation tensor set is saved as .png")  
-
-            leght= len(matrix_train) + len(matrix_val)
-            for i, matrix in enumerate(matrix_test):                
-                path_file = os.path.join(self.config.local_test_tensor_dir, str(leght+i)+'.png')
-                save_img(path_file, matrix)            
-            logging.info(f"Test tensor set is saved as .png") 
+            matrix_train, matrix_test = preprocessing_obj.tensor_matrix_pipeline.fit_transform(df)
+            scaler = StandardScaler()
+            l, m, n , c = matrix_train.shape
+            scaled_matrix_train = scaler.fit_transform(matrix_train.reshape(l, m*n)).reshape(l, m, n , c) 
+            l, m, n , c = matrix_test.shape
+            scaled_matrix_test = scaler.transform(matrix_test.reshape(l, m*n)).reshape(l, m, n , c) 
+              
+            save_pickle(path= self.config.local_train_tensor_dir , obj= scaled_matrix_train)
+            save_pickle(path= self.config.local_test_tensor_dir , obj= scaled_matrix_test)
+            save_pickle(path= self.config.local_scaler_tensor_dir, obj= scaler)
+             

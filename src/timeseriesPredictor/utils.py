@@ -1,12 +1,15 @@
 import os
 import sys
 import yaml
+import pickle
 
 import numpy as np
 import pandas as pd
+import matplotlib.pyplot as plt
 from timeseriesPredictor.logger import logging
 from timeseriesPredictor.exception import CustomException
 
+from typing import Any
 from box import ConfigBox
 from ensure import ensure_annotations
 from pathlib import Path
@@ -61,7 +64,24 @@ def get_size(path: Path) -> str:
     size_in_kb = round(os.path.getsize(path)/1024)
     return f"~ {size_in_kb} KB"
 
+#@ensure_annotations
+def save_pickle(path: Path, obj:Any):
+    """
+    save object as pickel 
 
+    Args:
+        path (Path): path to .pkl 
+        obj : object to be saved in the file             
+    """
+    try:
+        dir_path = os.path.dirname(path)
+        os.makedirs(dir_path, exist_ok=True)
+        with open(path, 'wb') as file_obj:
+            pickle.dump(obj, file_obj)
+        logging.info(f"pickel file saved at {path}")
+    
+    except Exception as e:
+            raise CustomException(e, sys)
 
 def resampling(dat, tensor, window="1D"):
     """
@@ -154,13 +174,31 @@ def OD_tensor_matrix(dat, tensor=False):
         OD_tensor_matrix[i] = mat
     return OD_tensor_matrix
 
-def train_validation_test(matrix, train_test_ratio, train_val_ratio):
+def train_test_split(matrix, train_test_ratio):
     lenght = len(matrix)
-    test_inital = int(train_test_ratio*lenght)    
-    val_inital = test_inital - int(train_val_ratio*test_inital)
+    test_inital = int(train_test_ratio*lenght)        
 
-    matrix_train = matrix[:val_inital]
-    matrix_val = matrix[val_inital:test_inital]
+    matrix_train = matrix[:test_inital]    
     matrix_test = matrix[test_inital:]
 
-    return matrix_train, matrix_val, matrix_test
+    return matrix_train, matrix_test
+
+def model_loss(history):
+    plt.figure(figsize=(10,5))
+
+    ColNames = {'model loss':['loss', 'val_loss'],
+                'model_accuracy':['MSE', 'val_MSE']}
+    
+    i=1
+    for ColName, _ in ColNames.items():   
+        plt.subplot(1,2 , i)     
+        plt.plot(history.history[ColNames[ColName][0]], label='Train')
+        plt.plot(history.history[ColNames[ColName][1]], label='Validation')
+        plt.title(ColName)
+        plt.ylabel(ColNames[ColName][0])
+        plt.xlabel('epochs')
+        plt.legend(loc='upper right')
+        plt.grid(linestyle="--")
+        plt.tight_layout()
+        i+=1
+    plt.show();

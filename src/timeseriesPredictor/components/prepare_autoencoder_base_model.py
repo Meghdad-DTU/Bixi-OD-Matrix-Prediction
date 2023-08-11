@@ -40,12 +40,14 @@ class PrepareAutoencoderBaseModel:
         x = keras.layers.Dropout(0.25)(x)
         x = keras.layers.UpSampling2D(upsampling2)(x)
 
-        decoder = keras.layers.Convolution2D(filters=3, kernel_size=(3, 3), activation='linear', padding='same')(x)      
+        decoder = keras.layers.Convolution2D(filters=1, kernel_size=(3, 3), activation='linear', padding='same')(x)      
         full_model = keras.Model(inputs=inputs, outputs=decoder)           
 
         full_model.compile(
             optimizer=keras.optimizers.Adam(learning_rate=learning_rate),
-            loss = 'mean_squared_error'            
+            loss = 'mean_squared_error',
+            metrics=['MSE'] 
+
                            )
         
         full_model.summary()

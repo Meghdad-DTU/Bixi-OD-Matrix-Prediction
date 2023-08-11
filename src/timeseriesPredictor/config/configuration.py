@@ -40,25 +40,17 @@ class configurationManeger:
     def get_data_transformation_config(self) -> DataTransformationConfig:
         config = self.config.data_transformation             
 
-        create_directories([config.root_dir,                            
-                            config.local_train_OD_dir,
-                            config.local_train_OD_dir,
-                            config.local_val_OD_dir,
-                            config.local_test_OD_dir,
-                            config.local_train_tensor_dir,
-                            config.local_val_tensor_dir,
-                            config.local_test_tensor_dir]
-                            )
+        create_directories([config.root_dir])
 
         data_trnsformation_config = DataTransformationConfig(
             root_dir= config.root_dir,
             local_data_file=self.config.data_ingestion.local_data_file,           
-            local_train_OD_dir= config.local_train_OD_dir,
-            local_val_OD_dir= config.local_val_OD_dir,
-            local_test_OD_dir= config.local_test_OD_dir,
-            local_train_tensor_dir= config.local_train_tensor_dir,
-            local_val_tensor_dir= config.local_val_tensor_dir,
-            local_test_tensor_dir= config.local_test_tensor_dir          
+            local_train_od_dir= config.local_train_od_dir,            
+            local_test_od_dir= config.local_test_od_dir,
+            local_scaler_od_dir=config.local_scaler_od_dir,
+            local_train_tensor_dir= config.local_train_tensor_dir,            
+            local_test_tensor_dir= config.local_test_tensor_dir,
+            local_scaler_tensor_dir= config.local_scaler_tensor_dir         
 
         )
 
