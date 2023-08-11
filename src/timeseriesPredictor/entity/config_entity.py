@@ -20,3 +20,19 @@ class DataTransformationConfig:
     local_train_tensor_dir: Path
     local_val_tensor_dir: Path
     local_test_tensor_dir: Path
+
+@dataclass
+class PrepareAutoencoderBaseModelConfig:
+    root_dir: Path    
+    base_od_model_path: Path
+    base_tensor_model_path: Path      
+    params_od_size: list
+    params_tensor_size: list
+    params_learning_rate: float
+
+@dataclass(frozen=True)
+class PrepareCallbacksConfig:
+    root_dir: Path
+    tensorboard_root_log_dir: Path
+    ckeckpoint_model_filepath: Path
+    patience: int

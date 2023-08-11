@@ -15,3 +15,14 @@ data_transformation:
   local_test_tensor_dir: artifacts/data_transformation/tensor/test
 
 
+prepare_autoencoder_base_model:
+  root_dir: artifacts/prepare_autoencoder_base_model
+  base_od_model_path: artifacts/prepare_autoencoder_base_model/base_od_model.h5 
+  base_tensor_model_path: artifacts/prepare_autoencoder_base_model/base_tensor_model.h5 
+
+prepare_callbacks:
+  root_dir: artifacts/prepare_callbacks
+  tensorboard_root_log_dir: artifacts/prepare_callbacks/tensorboard_log_dir
+  ckeckpoint_model_filepath: artifacts/prepare_callbacks/checkpoint_dir/model.h5
+
+
