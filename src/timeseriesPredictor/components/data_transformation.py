@@ -6,7 +6,7 @@ from box import ConfigBox
 
 from sklearn.preprocessing import FunctionTransformer
 from sklearn.pipeline import Pipeline
-from sklearn.preprocessing import StandardScaler
+from sklearn.preprocessing import StandardScaler, MinMaxScaler
 
 from timeseriesPredictor.config.configuration import DataTransformationConfig
 from timeseriesPredictor.utils import OD_tensor_matrix, OD_tensor_matrix, train_test_split, save_pickle
@@ -60,7 +60,7 @@ class DataTransformation:
 
             logging.info(f"Applying OD preprocessing object on dataframe")
             matrix_train, matrix_test = preprocessing_obj.OD_matrix_pipeline.fit_transform(df)             
-            scaler = StandardScaler()
+            scaler = MinMaxScaler()
             l, m, n , c = matrix_train.shape
             scaled_matrix_train = scaler.fit_transform(matrix_train.reshape(l, m*n)).reshape(l, m, n , c) 
             l, m, n , c = matrix_test.shape
@@ -73,7 +73,7 @@ class DataTransformation:
 
             logging.info(f"Applying tensor preprocessing object on dataframe")
             matrix_train, matrix_test = preprocessing_obj.tensor_matrix_pipeline.fit_transform(df)
-            scaler = StandardScaler()
+            scaler = MinMaxScaler()
             l, m, n , c = matrix_train.shape
             scaled_matrix_train = scaler.fit_transform(matrix_train.reshape(l, m*n)).reshape(l, m, n , c) 
             l, m, n , c = matrix_test.shape

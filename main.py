@@ -18,7 +18,7 @@ except Exception as e:
     raise CustomException(e, sys)"""
 
 
-"""STAGE_NAME = "Data Transformation Stage"
+STAGE_NAME = "Data Transformation Stage"
 
 try:
     logging.info(f'>>>>>>> {STAGE_NAME} started <<<<<<<<')
@@ -27,7 +27,7 @@ try:
     logging.info(f'>>>>>>> {STAGE_NAME} completed <<<<<<<<')
     
 except Exception as e:
-    raise CustomException(e, sys)"""
+    raise CustomException(e, sys)
 
 
 STAGE_NAME = "Prepare Autoencoder Base Model Stage"
