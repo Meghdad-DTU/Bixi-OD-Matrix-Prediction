@@ -2,6 +2,7 @@ import os
 import sys
 import yaml
 import pickle
+import json
 
 import numpy as np
 import pandas as pd
@@ -51,7 +52,6 @@ def create_directories(path_to_directories: list, verbos=True):
         if verbos:
             logging.info(f'created directory at {path}')
 
-
 @ensure_annotations
 def get_size(path: Path) -> str:
     """get size in KB
@@ -83,6 +83,23 @@ def save_pickle(path: Path, obj:Any):
     
     except Exception as e:
             raise CustomException(e, sys)
+    
+#@ensure_annotations
+def save_json(path:Path, data:dict):
+    """
+    save json data
+
+    Args:
+        path(Path): path to json file
+        data (dict): data to be saved in json file        
+    """
+
+    with open(path, 'w') as f:
+        json.dump(data, f, indent=4)
+
+    logging.info(f"json file saved at {path}")
+
+
 
 def resampling(dat, tensor, window="1D"):
     """
@@ -242,9 +259,63 @@ def evaluate_forecasts(actual, predicted, text = "Test", plot=True):
         plt.plot(np.arange(len(RMSEs)), RMSEs, label=True)
         plt.plot(np.arange(len(MAEs)), MAEs, label=True)
         plt.grid(linestyle="--")
-        plt.xlabel("Community number")
+        plt.xlabel("Matrix cells")
         plt.legend(["RMSE", "MAE"])
         plt.title("Performance metrics for "+ text +" dataset")
         plt.show()
 
     return overal_mae, MAEs, overal_rmse, RMSEs
+
+def split_sequence(sequence, lag):
+        '''
+        This function splits a given univariate sequence into
+        multiple samples where each sample has a specified number
+        of time steps and the output is a single time step.
+        param new_input: If True it is used for predicting new input
+        '''
+        try:
+                
+            X, y = list(), list()
+            for i in range(len(sequence)):
+                # find the end of this pattern
+                end_ix = i + lag
+                # check if we are beyond the sequence               
+                if end_ix > len(sequence)-1:
+                    break
+            # gather input and output parts of the pattern
+                seq_x, seq_y = sequence[i:end_ix], sequence[end_ix]
+                X.append(seq_x)
+                y.append(seq_y)
+            return np.array(X), np.array(y)
+    
+        except Exception as e:
+            raise CustomException(e, sys)
+    
+def convert_to_supervised(dat, lag):
+        '''
+        This function takes a 2D sequennce, scales the array and splits
+        a given multivariate sequence into multiple samples where each sample has a specified number
+        of time steps. It returns multiple time steps as well as the scaler.
+        param df (DataFrame): Bike sharing demand for each community over time
+        param lag (int): History length or time lag
+        '''
+        
+        try:
+            if isinstance(dat, np.ndarray):
+                pass
+            else:
+                dat = dat.values
+            
+            m, n = dat.shape
+            # e.g., if lag = 7, BIXI demand of past 7*15 minutes
+            X = np.zeros((m-lag,lag, n))
+            Y = np.zeros((m-lag,n))
+
+            for i in range(0,n):
+                x, y = split_sequence(dat[:,i], lag)
+                X[:,:,i] = x
+                Y[:,i] = y
+            return X, Y
+    
+        except Exception as e:
+            raise CustomException(e, sys)   

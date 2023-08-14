@@ -5,7 +5,7 @@ from timeseriesPredictor.pipeline.stage_01_data_ingestion import DataIngestionTr
 from timeseriesPredictor.pipeline.stage_02_data_transformation import DataTransformationTrainingPipeline
 from timeseriesPredictor.pipeline.stage_03_prepare_autoencoder_base_model import PrepareAutoencoderBaseModelTrainingPipeline
 from timeseriesPredictor.pipeline.stage_04_training_autoencoder import AutoencoderModelTrainingPipeline
-
+from timeseriesPredictor.pipeline.stage_05_evaluating_autoencoder import AutoencoderEvaluationPipeline
 
 """STAGE_NAME = "Data Ingestion Stage"
 
@@ -28,7 +28,7 @@ try:
     logging.info(f'>>>>>>> {STAGE_NAME} completed <<<<<<<<')
     
 except Exception as e:
-    raise CustomException(e, sys)
+    raise CustomException(e, sys)"""
 
 
 STAGE_NAME = "Prepare Autoencoder Base Model Stage"
@@ -40,13 +40,24 @@ try:
     logging.info(f'>>>>>>> {STAGE_NAME} completed <<<<<<<<')
     
 except Exception as e:
-    raise CustomException(e, sys)"""
+    raise CustomException(e, sys)
 
 STAGE_NAME = "Autoencoder Training Model Stage"
 
 try:
     logging.info(f'>>>>>>> {STAGE_NAME} started <<<<<<<<')
     obj = AutoencoderModelTrainingPipeline()
+    obj.main()
+    logging.info(f'>>>>>>> {STAGE_NAME} completed <<<<<<<<')
+    
+except Exception as e:
+    raise CustomException(e, sys)
+
+STAGE_NAME = "Autoencoder Evaluatiing Model Performance Stage"
+
+try:
+    logging.info(f'>>>>>>> {STAGE_NAME} started <<<<<<<<')
+    obj = AutoencoderEvaluationPipeline()
     obj.main()
     logging.info(f'>>>>>>> {STAGE_NAME} completed <<<<<<<<')
     

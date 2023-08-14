@@ -5,7 +5,8 @@ from timeseriesPredictor.entity.config_entity import (DataIngestionConfig,
                                                       DataTransformationConfig,
                                                       PrepareAutoencoderBaseModelConfig,
                                                       PrepareCallbacksConfig,
-                                                      TrainingAutoencoderConfig)
+                                                      TrainingAutoencoderConfig,
+                                                      AutoencoderEvaluationConfig)
                                                       
 
 class configurationManeger:
@@ -113,3 +114,19 @@ class configurationManeger:
         )
 
         return training_autoencoder_config
+    
+    def get_autoencoder_evaluation_config(self) -> AutoencoderEvaluationConfig:        
+
+        autoencoder_evaluation_config = AutoencoderEvaluationConfig(
+        trained_od_model_path= self.config.training_autoencoder.trained_od_model_path,
+        trained_tensor_model_path= self.config.training_autoencoder.trained_tensor_model_path, 
+        test_od_data = self.config.data_transformation.local_test_od_dir,
+        test_tensor_data = self.config.data_transformation.local_test_tensor_dir,
+        scaler_od= self.config.data_transformation.local_scaler_od_dir,
+        scaler_tensor= self.config.data_transformation.local_scaler_tensor_dir,                     
+        params_od_size= self.params.OD_SIZE,
+        params_tensor_size=self.params.TENSOR_SIZE,
+                     
+        )
+
+        return autoencoder_evaluation_config

@@ -52,3 +52,14 @@ class TrainingAutoencoderConfig:
     params_batch_size: int   
     learning_rate: float
     validation_ratio: float
+
+@dataclass(frozen=True)
+class AutoencoderEvaluationConfig:
+    trained_od_model_path: Path
+    trained_tensor_model_path: Path       
+    test_od_data: Path
+    test_tensor_data: Path 
+    scaler_od: Path
+    scaler_tensor: Path   
+    params_od_size: list
+    params_tensor_size: list

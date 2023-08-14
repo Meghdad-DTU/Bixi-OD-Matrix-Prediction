@@ -8,7 +8,7 @@ class PrepareAutoencoderBaseModel:
         self.config = config
 
     @staticmethod
-    def save_model(path: Path, model:keras.Model):
+    def save_model(path:Path, model:keras.Model):
         model.save(path)
 
     @staticmethod
@@ -23,35 +23,33 @@ class PrepareAutoencoderBaseModel:
         
         inputs = keras.layers.Input(shape= input_shape, name='matrix_array') 
         # encoder
-        x = keras.layers.Convolution2D(filters=18, kernel_size=(3, 3), padding='same')(inputs)
-        x = keras.layers.BatchNormalization()(x)
-        x = keras.layers.Activation('relu')(x)
-        x = keras.layers.MaxPooling2D(pool_size=(2, 2))(x)
-        x = keras.layers.Dropout(0.25)(x)          
-      
-        bottleneck = keras.layers.MaxPooling2D(pool_size=(2, 2), padding='same', name='bottleneck')(x)        
+        encoded = keras.layers.Convolution2D(filters=18, kernel_size=(3, 3), activation='relu', padding='same')(inputs)
+        encoded = keras.layers.Convolution2D(filters=3, kernel_size=(3, 3), activation='relu', padding='same')(encoded)        
+        encoded = keras.layers.BatchNormalization()(encoded)        
+        encoded = keras.layers.MaxPooling2D(pool_size=(2, 2))(encoded)
+        encoded = keras.layers.Dropout(0.25)(encoded)     
+        bottleneck = keras.layers.MaxPooling2D(pool_size=(2, 2), padding='same', name='bottleneck')(encoded)        
         
         # decoder
-        x = keras.layers.UpSampling2D(upsampling1)(bottleneck)
-        x = keras.layers.Convolution2D(filters=9, kernel_size=(3, 3), padding='same')(x)
-        x = keras.layers.BatchNormalization()(x)      
-        x = keras.layers.Activation('relu')(x)
-        x = keras.layers.MaxPooling2D(pool_size=(2, 2), padding='same')(x)
-        x = keras.layers.Dropout(0.25)(x)
-        x = keras.layers.UpSampling2D(upsampling2)(x)
+        decoded = keras.layers.UpSampling2D(upsampling1)(bottleneck)        
+        decoded = keras.layers.Convolution2D(filters=18, kernel_size=(3, 3), activation='relu', padding='same')(decoded)
+        decoded = keras.layers.Convolution2D(filters=18, kernel_size=(3, 3), activation='relu', padding='same')(decoded)
+        decoded = keras.layers.BatchNormalization()(decoded)             
+        decoded = keras.layers.MaxPooling2D(pool_size=(2, 2), padding='same')(decoded)
+        decoded = keras.layers.Dropout(0.25)(decoded)
+        decoded = keras.layers.UpSampling2D(upsampling2)(decoded)        
 
-        decoder = keras.layers.Convolution2D(filters=1, kernel_size=(3, 3), activation='linear', padding='same')(x)      
-        full_model = keras.Model(inputs=inputs, outputs=decoder)           
+        decoded = keras.layers.Convolution2D(filters=1, kernel_size=(3, 3), activation='linear', padding='same')(decoded)      
+        autoencoder = keras.Model(inputs=inputs, outputs=decoded)           
 
-        full_model.compile(
+        autoencoder.compile(
             optimizer=keras.optimizers.Adam(learning_rate=learning_rate),
-            loss = 'mean_squared_error',
-            metrics=['MSE'] 
-
+            loss = 'mean_squared_error' ,
+            metrics=['MSE']           
                            )
         
-        full_model.summary()
-        return full_model
+        autoencoder.summary()
+        return autoencoder
     
     def update_model(self):
         input_shapes = [self.config.params_od_size, self.config.params_tensor_size]
@@ -66,5 +64,7 @@ class PrepareAutoencoderBaseModel:
 
             self.save_model(path=model_path , model=self.full_model)
             logging.info(f"Autoencoder base model saved at {model_path}!")
+
+    
 
     
