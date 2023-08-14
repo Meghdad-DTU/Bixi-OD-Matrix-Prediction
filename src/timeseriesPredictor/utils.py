@@ -8,6 +8,7 @@ import pandas as pd
 import matplotlib.pyplot as plt
 from timeseriesPredictor.logger import logging
 from timeseriesPredictor.exception import CustomException
+from sklearn.metrics import mean_absolute_error, mean_squared_error
 
 from typing import Any
 from box import ConfigBox
@@ -196,9 +197,54 @@ def model_loss(history):
         plt.plot(history.history[ColNames[ColName][1]], label='Validation')
         plt.title(ColName)
         plt.ylabel(ColNames[ColName][0])
-        plt.xlabel('epochs')
+
         plt.legend(loc='upper right')
         plt.grid(linestyle="--")
         plt.tight_layout()
         i+=1
     plt.show();
+
+def evaluate_forecasts(actual, predicted, text = "Test", plot=True):
+    """
+    Evaluate prediction performance based on RMSE and MAE
+    """
+    RMSEs = list()
+    MAEs = list()
+    # calculate an RMSE score for each day
+    for i in range(actual.shape[1]):
+        # calculate mse
+        mse = mean_squared_error(actual[:, i], predicted[:, i])
+        # calculate rmse
+        rmse = np.sqrt(mse)
+        # store
+        RMSEs.append(rmse)
+
+        # calculate mae
+        mae = mean_absolute_error(actual[:,i], predicted[:,i])
+        # store
+        MAEs.append(mae)
+
+    # calculate overall RMSE and MAE
+    y_true = actual.flatten()
+    y_hat = predicted.flatten()
+
+    overal_mae = mean_absolute_error(y_true, y_hat)
+    overal_rmse = np.sqrt(mean_squared_error(y_true, y_hat))
+
+    print("#### Evaluating performance metrics ####")
+    print("\n===="+ text+" SET ====")
+    print("MAE: {0:.3f}".format(overal_mae))
+    print("RMSE: {0:.3f}".format(overal_rmse))
+    print("MAEs: ", np.round(MAEs,3))
+    print("RMSEs: ", np.round(RMSEs,3))
+
+    if plot:
+        plt.plot(np.arange(len(RMSEs)), RMSEs, label=True)
+        plt.plot(np.arange(len(MAEs)), MAEs, label=True)
+        plt.grid(linestyle="--")
+        plt.xlabel("Community number")
+        plt.legend(["RMSE", "MAE"])
+        plt.title("Performance metrics for "+ text +" dataset")
+        plt.show()
+
+    return overal_mae, MAEs, overal_rmse, RMSEs

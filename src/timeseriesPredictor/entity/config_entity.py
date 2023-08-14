@@ -36,3 +36,19 @@ class PrepareCallbacksConfig:
     tensorboard_root_log_dir: Path
     ckeckpoint_model_filepath: Path
     patience: int
+
+@dataclass(frozen=True)
+class TrainingAutoencoderConfig:    
+    root_dir: Path
+    trained_od_model_path: Path    
+    base_od_model_path: Path
+    trained_tensor_model_path: Path    
+    base_tensor_model_path: Path     
+    training_od_data: Path    
+    training_tensor_data: Path    
+    params_od_size: list
+    params_tensor_size: list
+    params_epochs: int
+    params_batch_size: int   
+    learning_rate: float
+    validation_ratio: float

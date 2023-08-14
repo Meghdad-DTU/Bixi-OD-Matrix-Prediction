@@ -4,7 +4,8 @@ from timeseriesPredictor.utils import read_yaml, create_directories
 from timeseriesPredictor.entity.config_entity import (DataIngestionConfig,
                                                       DataTransformationConfig,
                                                       PrepareAutoencoderBaseModelConfig,
-                                                      PrepareCallbacksConfig)
+                                                      PrepareCallbacksConfig,
+                                                      TrainingAutoencoderConfig)
                                                       
 
 class configurationManeger:
@@ -89,3 +90,26 @@ class configurationManeger:
         )
 
         return prepare_callbacks_config
+    
+    def get_autoencoder_training_config(self) -> TrainingAutoencoderConfig:
+        config= self.config.training_autoencoder        
+        
+        create_directories([config.root_dir])
+
+        training_autoencoder_config = TrainingAutoencoderConfig(
+        root_dir= config.root_dir,
+        trained_od_model_path= config.trained_od_model_path, 
+        base_od_model_path = self.config.prepare_autoencoder_base_model.base_od_model_path,
+        trained_tensor_model_path= config.trained_tensor_model_path, 
+        base_tensor_model_path = self.config.prepare_autoencoder_base_model.base_tensor_model_path,
+        training_od_data= self.config.data_transformation.local_train_od_dir,        
+        training_tensor_data=self.config.data_transformation.local_train_tensor_dir,        
+        params_epochs= self.params.EPOCHS, 
+        params_batch_size= self.params.BATCH_SIZE,      
+        params_od_size= self.params.OD_SIZE,
+        params_tensor_size=self.params.TENSOR_SIZE,
+        learning_rate= self.params.LEARNING_RATE,
+        validation_ratio= self.params.VALIDATION_RATIO
+        )
+
+        return training_autoencoder_config
