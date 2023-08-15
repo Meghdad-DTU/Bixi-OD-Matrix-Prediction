@@ -30,5 +30,13 @@ training_autoencoder:
   trained_od_model_path: artifacts/training_autoencoder/od_model.h5
   trained_tensor_model_path: artifacts/training_autoencoder/tensor_model.h5
 
+prepare_timeseries_base_model:
+  root_dir: artifacts/prepare_timeseries_base_model
+  base_od_model_path: artifacts/prepare_timeseries_base_model/base_od_model.h5 
+  base_tensor_model_path: artifacts/prepare_timeseries_base_model/base_tensor_model.h5 
 
 
+training_timeseries:
+  root_dir: artifacts/training_timeseries
+  trained_od_model_path: artifacts/training_timeseries/od_model.h5
+  trained_tensor_model_path: artifacts/training_timeseries/tensor_model.h5

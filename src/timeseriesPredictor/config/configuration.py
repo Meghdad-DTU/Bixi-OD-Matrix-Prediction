@@ -6,7 +6,8 @@ from timeseriesPredictor.entity.config_entity import (DataIngestionConfig,
                                                       PrepareAutoencoderBaseModelConfig,
                                                       PrepareCallbacksConfig,
                                                       TrainingAutoencoderConfig,
-                                                      AutoencoderEvaluationConfig)
+                                                      AutoencoderEvaluationConfig,
+                                                      PrepareTimeseriesBaseModelConfig)
                                                       
 
 class configurationManeger:
@@ -130,3 +131,21 @@ class configurationManeger:
         )
 
         return autoencoder_evaluation_config
+    
+    def get_prepare_timeseries_base_model_config(self) -> PrepareTimeseriesBaseModelConfig:
+        config = self.config.prepare_timeseries_base_model
+        
+        create_directories([config.root_dir])
+
+        prepare_timeseries_base_model_config = PrepareTimeseriesBaseModelConfig(
+            root_dir = config.root_dir,           
+            base_od_model_path = config.base_od_model_path,    
+            base_tensor_model_path = config.base_tensor_model_path,                   
+            params_od_size = self.params.OD_SIZE,
+            params_tensor_size= self.params.TENSOR_SIZE,
+            params_learning_rate = self.params.LEARNING_RATE ,
+            params_time_lag = self.params.TIME_LAG                
+
+        )
+
+        return prepare_timeseries_base_model_config

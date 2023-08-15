@@ -63,3 +63,13 @@ class AutoencoderEvaluationConfig:
     scaler_tensor: Path   
     params_od_size: list
     params_tensor_size: list
+    
+@dataclass(frozen=True)
+class PrepareTimeseriesBaseModelConfig:
+    root_dir: Path
+    base_od_model_path: Path
+    base_tensor_model_path: Path
+    params_od_size: list
+    params_tensor_size: list
+    params_learning_rate: float
+    params_time_lag : int
