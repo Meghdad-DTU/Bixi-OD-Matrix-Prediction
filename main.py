@@ -3,12 +3,12 @@ from timeseriesPredictor.logger import logging
 from timeseriesPredictor.exception import CustomException
 from timeseriesPredictor.pipeline.stage_01_data_ingestion import DataIngestionTrainingPipeline
 from timeseriesPredictor.pipeline.stage_02_data_transformation import DataTransformationTrainingPipeline
-from timeseriesPredictor.pipeline.stage_03_prepare_autoencoder_base_model import PrepareAutoencoderBaseModelTrainingPipeline
-from timeseriesPredictor.pipeline.stage_04_training_autoencoder import AutoencoderModelTrainingPipeline
-from timeseriesPredictor.pipeline.stage_05_evaluating_autoencoder import AutoencoderEvaluationPipeline
+from timeseriesPredictor.pipeline.stage_03_prepare_cnn_autoencoder_base_model import PrepareCNNAutoencoderBaseModelTrainingPipeline
+from timeseriesPredictor.pipeline.stage_04_training_cnn_autoencoder import CNNAutoencoderModelTrainingPipeline
+from timeseriesPredictor.pipeline.stage_05_evaluating_cnn_autoencoder import CNNAutoencoderEvaluationPipeline
 from timeseriesPredictor.pipeline.stage_06_prepare_timeseries_base_model import PrepareTimeseriesBaseModelTrainingPipeline
 
-"""STAGE_NAME = "Data Ingestion Stage"
+'''STAGE_NAME = "Data Ingestion Stage"
 
 try:
     logging.info(f'>>>>>>> {STAGE_NAME} started <<<<<<<<')
@@ -29,41 +29,41 @@ try:
     logging.info(f'>>>>>>> {STAGE_NAME} completed <<<<<<<<')
     
 except Exception as e:
-    raise CustomException(e, sys)
+    raise CustomException(e, sys)'''
 
 
-STAGE_NAME = "Prepare Autoencoder Base Model Stage"
+STAGE_NAME = "Prepare CNN Autoencoder Base Model Stage"
 
 try:
     logging.info(f'>>>>>>> {STAGE_NAME} started <<<<<<<<')
-    obj = PrepareAutoencoderBaseModelTrainingPipeline()
+    obj = PrepareCNNAutoencoderBaseModelTrainingPipeline()
     obj.main()
     logging.info(f'>>>>>>> {STAGE_NAME} completed <<<<<<<<')
     
 except Exception as e:
     raise CustomException(e, sys)
 
-STAGE_NAME = "Autoencoder Training Model Stage"
+STAGE_NAME = "CNN Autoencoder Training Model Stage"
 
 try:
     logging.info(f'>>>>>>> {STAGE_NAME} started <<<<<<<<')
-    obj = AutoencoderModelTrainingPipeline()
+    obj = CNNAutoencoderModelTrainingPipeline()
     obj.main()
     logging.info(f'>>>>>>> {STAGE_NAME} completed <<<<<<<<')
     
 except Exception as e:
     raise CustomException(e, sys)
 
-STAGE_NAME = "Autoencoder Evaluatiing Model Performance Stage"
+STAGE_NAME = "CNN Autoencoder Evaluatiing Model Performance Stage"
 
 try:
     logging.info(f'>>>>>>> {STAGE_NAME} started <<<<<<<<')
-    obj = AutoencoderEvaluationPipeline()
+    obj = CNNAutoencoderEvaluationPipeline()
     obj.main()
     logging.info(f'>>>>>>> {STAGE_NAME} completed <<<<<<<<')
     
 except Exception as e:
-    raise CustomException(e, sys)"""
+    raise CustomException(e, sys)
 
 STAGE_NAME = "Prepare Timeseries Base Model Stage"
 

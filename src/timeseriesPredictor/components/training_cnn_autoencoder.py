@@ -2,10 +2,10 @@ import keras
 from pathlib import Path
 import pickle
 from timeseriesPredictor.utils import model_loss
-from timeseriesPredictor.entity.config_entity import TrainingAutoencoderConfig
+from timeseriesPredictor.entity.config_entity import TrainingCNNAutoencoderConfig
 
-class TrainingAutoencoder:
-    def __init__(self, config: TrainingAutoencoderConfig):
+class TrainingCNNAutoencoder:
+    def __init__(self, config: TrainingCNNAutoencoderConfig):
         self.config= config
 
     @staticmethod

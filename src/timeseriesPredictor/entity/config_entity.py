@@ -22,7 +22,7 @@ class DataTransformationConfig:
     local_scaler_tensor_dir: Path
 
 @dataclass
-class PrepareAutoencoderBaseModelConfig:
+class PrepareCNNAutoencoderBaseModelConfig:
     root_dir: Path    
     base_od_model_path: Path
     base_tensor_model_path: Path      
@@ -38,7 +38,7 @@ class PrepareCallbacksConfig:
     patience: int
 
 @dataclass(frozen=True)
-class TrainingAutoencoderConfig:    
+class TrainingCNNAutoencoderConfig:    
     root_dir: Path
     trained_od_model_path: Path    
     base_od_model_path: Path
@@ -54,7 +54,7 @@ class TrainingAutoencoderConfig:
     validation_ratio: float
 
 @dataclass(frozen=True)
-class AutoencoderEvaluationConfig:
+class CNNAutoencoderEvaluationConfig:
     trained_od_model_path: Path
     trained_tensor_model_path: Path       
     test_od_data: Path

@@ -3,10 +3,10 @@ from timeseriesPredictor.constants import *
 from timeseriesPredictor.utils import read_yaml, create_directories
 from timeseriesPredictor.entity.config_entity import (DataIngestionConfig,
                                                       DataTransformationConfig,
-                                                      PrepareAutoencoderBaseModelConfig,
+                                                      PrepareCNNAutoencoderBaseModelConfig,
                                                       PrepareCallbacksConfig,
-                                                      TrainingAutoencoderConfig,
-                                                      AutoencoderEvaluationConfig,
+                                                      TrainingCNNAutoencoderConfig,
+                                                      CNNAutoencoderEvaluationConfig,
                                                       PrepareTimeseriesBaseModelConfig)
                                                       
 
@@ -59,12 +59,12 @@ class configurationManeger:
 
         return data_trnsformation_config
     
-    def get_prepare_autoencoder_base_model_config(self) -> PrepareAutoencoderBaseModelConfig:
+    def get_prepare_autoencoder_base_model_config(self) -> PrepareCNNAutoencoderBaseModelConfig:
         config = self.config.prepare_autoencoder_base_model
         
         create_directories([config.root_dir])
 
-        prepare_autoencoder_base_model_config = PrepareAutoencoderBaseModelConfig(
+        prepare_autoencoder_base_model_config = PrepareCNNAutoencoderBaseModelConfig(
             root_dir = config.root_dir,           
             base_od_model_path = config.base_od_model_path,    
             base_tensor_model_path = config.base_tensor_model_path,                   
@@ -93,12 +93,12 @@ class configurationManeger:
 
         return prepare_callbacks_config
     
-    def get_autoencoder_training_config(self) -> TrainingAutoencoderConfig:
+    def get_autoencoder_training_config(self) -> TrainingCNNAutoencoderConfig:
         config= self.config.training_autoencoder        
         
         create_directories([config.root_dir])
 
-        training_autoencoder_config = TrainingAutoencoderConfig(
+        training_autoencoder_config = TrainingCNNAutoencoderConfig(
         root_dir= config.root_dir,
         trained_od_model_path= config.trained_od_model_path, 
         base_od_model_path = self.config.prepare_autoencoder_base_model.base_od_model_path,
@@ -116,9 +116,9 @@ class configurationManeger:
 
         return training_autoencoder_config
     
-    def get_autoencoder_evaluation_config(self) -> AutoencoderEvaluationConfig:        
+    def get_autoencoder_evaluation_config(self) -> CNNAutoencoderEvaluationConfig:        
 
-        autoencoder_evaluation_config = AutoencoderEvaluationConfig(
+        autoencoder_evaluation_config = CNNAutoencoderEvaluationConfig(
         trained_od_model_path= self.config.training_autoencoder.trained_od_model_path,
         trained_tensor_model_path= self.config.training_autoencoder.trained_tensor_model_path, 
         test_od_data = self.config.data_transformation.local_test_od_dir,

@@ -3,10 +3,10 @@ import pickle
 from pathlib import Path
 from timeseriesPredictor.utils import evaluate_forecasts, save_json
 from timeseriesPredictor.logger import logging
-from timeseriesPredictor.entity.config_entity import AutoencoderEvaluationConfig
+from timeseriesPredictor.entity.config_entity import CNNAutoencoderEvaluationConfig
 
-class AutoencoderEvaluation:
-    def __init__(self, config: AutoencoderEvaluationConfig):
+class CNNAutoencoderEvaluation:
+    def __init__(self, config: CNNAutoencoderEvaluationConfig):
         self.config = config
 
     
@@ -44,4 +44,4 @@ class AutoencoderEvaluation:
                self.best_mae = avg_mae
                best_autoencoder_path = trained_model_path
         
-        logging.info(f'Best autoencoder model based on the least average RMSE is stored at: {best_autoencoder_path}') 
+        logging.info(f'Best CNN autoencoder model based on the least average RMSE is stored at: {best_autoencoder_path}') 

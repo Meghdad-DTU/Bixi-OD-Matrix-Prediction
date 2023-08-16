@@ -1,10 +1,10 @@
 from timeseriesPredictor.logger import logging
-from timeseriesPredictor.config.configuration import PrepareAutoencoderBaseModelConfig
+from timeseriesPredictor.config.configuration import PrepareCNNAutoencoderBaseModelConfig
 from pathlib import Path
 import keras
 
-class PrepareAutoencoderBaseModel:
-    def __init__(self, config: PrepareAutoencoderBaseModelConfig):
+class PrepareCNNAutoencoderBaseModel:
+    def __init__(self, config: PrepareCNNAutoencoderBaseModelConfig):
         self.config = config
 
     @staticmethod
@@ -63,7 +63,7 @@ class PrepareAutoencoderBaseModel:
             )
 
             self.save_model(path=model_path , model=self.full_model)
-            logging.info(f"Autoencoder base model saved at {model_path}!")
+            logging.info(f"CNN Autoencoder base model saved at {model_path}!")
 
     
 
