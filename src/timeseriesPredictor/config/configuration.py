@@ -141,8 +141,8 @@ class configurationManeger:
             root_dir = config.root_dir,           
             base_od_model_path = config.base_od_model_path,    
             base_tensor_model_path = config.base_tensor_model_path,                   
-            params_od_size = self.params.OD_SIZE,
-            params_tensor_size= self.params.TENSOR_SIZE,
+            trained_od_autoencoder_path = self.config.training_autoencoder.trained_od_model_path,
+            trained_tensor_autoencoder_path= self.config.training_autoencoder.trained_tensor_model_path,
             params_learning_rate = self.params.LEARNING_RATE ,
             params_time_lag = self.params.TIME_LAG                
 

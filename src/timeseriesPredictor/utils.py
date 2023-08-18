@@ -266,56 +266,28 @@ def evaluate_forecasts(actual, predicted, text = "Test", plot=True):
 
     return overal_mae, MAEs, overal_rmse, RMSEs
 
-def split_sequence(sequence, lag):
-        '''
-        This function splits a given univariate sequence into
-        multiple samples where each sample has a specified number
-        of time steps and the output is a single time step.
-        param new_input: If True it is used for predicting new input
-        '''
-        try:
-                
-            X, y = list(), list()
-            for i in range(len(sequence)):
-                # find the end of this pattern
-                end_ix = i + lag
-                # check if we are beyond the sequence               
-                if end_ix > len(sequence)-1:
-                    break
-            # gather input and output parts of the pattern
-                seq_x, seq_y = sequence[i:end_ix], sequence[end_ix]
-                X.append(seq_x)
-                y.append(seq_y)
-            return np.array(X), np.array(y)
-    
-        except Exception as e:
-            raise CustomException(e, sys)
-    
-def convert_to_supervised(dat, lag):
-        '''
-        This function takes a 2D sequennce, scales the array and splits
-        a given multivariate sequence into multiple samples where each sample has a specified number
-        of time steps. It returns multiple time steps as well as the scaler.
-        param df (DataFrame): Bike sharing demand for each community over time
-        param lag (int): History length or time lag
-        '''
-        
-        try:
-            if isinstance(dat, np.ndarray):
-                pass
-            else:
-                dat = dat.values
-            
-            m, n = dat.shape
-            # e.g., if lag = 7, BIXI demand of past 7*15 minutes
-            X = np.zeros((m-lag,lag, n))
-            Y = np.zeros((m-lag,n))
 
-            for i in range(0,n):
-                x, y = split_sequence(dat[:,i], lag)
-                X[:,:,i] = x
-                Y[:,i] = y
-            return X, Y
-    
-        except Exception as e:
-            raise CustomException(e, sys)   
+def videos_frame(encoded_dat, dat, lag):
+    """
+    This function takes the output of encoder and original dataset and converts them to
+    videos and next_frame. Encoder is the encoded part of the cnn_autoencoder trained on dat.
+    Here, videos are lag number of matrix (from encoder) which are stacked in a tensor.
+    Next_frame, is one frame after the last frame video but from dat.
+
+    Args:
+        encoded_dat (4D array): encoded bixi-OD or tensor matrix
+        dat (4D array): bixi-OD or tensor matrix
+        lag (int): time window       
+    """
+    videos = np.empty((encoded_dat.shape[0] -lag, encoded_dat.shape[1], encoded_dat.shape[2], encoded_dat.shape[3], lag))
+    next_frame = np.empty((dat.shape[0] -lag, dat.shape[1], dat.shape[2], dat.shape[3]))
+
+    for i in range(len(encoded_dat)):
+        for j in range(lag):
+            if (i) < len(videos):
+                videos[i, :, :, :, j] = encoded_dat[j+i]
+                next_frame[i] = dat[i+j+1]
+            else:
+                break
+    return videos, next_frame
+

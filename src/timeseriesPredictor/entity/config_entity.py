@@ -69,7 +69,7 @@ class PrepareTimeseriesBaseModelConfig:
     root_dir: Path
     base_od_model_path: Path
     base_tensor_model_path: Path
-    params_od_size: list
-    params_tensor_size: list
+    trained_od_autoencoder_path: Path
+    trained_tensor_autoencoder_path: Path
     params_learning_rate: float
     params_time_lag : int

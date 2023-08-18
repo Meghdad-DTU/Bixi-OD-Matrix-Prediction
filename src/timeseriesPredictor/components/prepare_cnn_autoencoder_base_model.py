@@ -28,7 +28,7 @@ class PrepareCNNAutoencoderBaseModel:
         encoded = keras.layers.BatchNormalization()(encoded)        
         encoded = keras.layers.MaxPooling2D(pool_size=(2, 2))(encoded)
         encoded = keras.layers.Dropout(0.25)(encoded)     
-        bottleneck = keras.layers.MaxPooling2D(pool_size=(2, 2), padding='same', name='bottleneck')(encoded)        
+        bottleneck = keras.layers.MaxPooling2D(pool_size=(2, 2), padding='same', name='encoder')(encoded)        
         
         # decoder
         decoded = keras.layers.UpSampling2D(upsampling1)(bottleneck)        
@@ -39,7 +39,7 @@ class PrepareCNNAutoencoderBaseModel:
         decoded = keras.layers.Dropout(0.25)(decoded)
         decoded = keras.layers.UpSampling2D(upsampling2)(decoded)        
 
-        decoded = keras.layers.Convolution2D(filters=1, kernel_size=(3, 3), activation='linear', padding='same')(decoded)      
+        decoded = keras.layers.Convolution2D(filters=1, kernel_size=(3, 3), activation='linear', padding='same', name='decoder')(decoded)      
         autoencoder = keras.Model(inputs=inputs, outputs=decoded)           
 
         autoencoder.compile(

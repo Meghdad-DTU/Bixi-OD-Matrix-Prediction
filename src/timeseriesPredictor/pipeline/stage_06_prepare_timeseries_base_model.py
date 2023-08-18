@@ -18,6 +18,7 @@ class PrepareTimeseriesBaseModelTrainingPipeline:
         prepare_timeseries_base_model.update_model()
 
 
+
 if __name__ == '__main__':
     try:        
         logging.info(f'>>>>>>> stage {STAGE_NAME} started <<<<<<<<')
