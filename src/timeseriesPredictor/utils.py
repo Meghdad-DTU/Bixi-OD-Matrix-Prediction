@@ -267,7 +267,7 @@ def evaluate_forecasts(actual, predicted, text = "Test", plot=True):
     return overal_mae, MAEs, overal_rmse, RMSEs
 
 
-def videos_frame(encoded_dat, dat, lag):
+def videos_frame_format(encoded_dat, dat, lag):
     """
     This function takes the output of encoder and original dataset and converts them to
     videos and next_frame. Encoder is the encoded part of the cnn_autoencoder trained on dat.
@@ -289,5 +289,6 @@ def videos_frame(encoded_dat, dat, lag):
                 next_frame[i] = dat[i+j+1]
             else:
                 break
+    logging.info("Data has changed into video next_frame format!")
     return videos, next_frame
 

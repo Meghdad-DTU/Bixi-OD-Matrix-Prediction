@@ -73,3 +73,20 @@ class PrepareTimeseriesBaseModelConfig:
     trained_tensor_autoencoder_path: Path
     params_learning_rate: float
     params_time_lag : int
+
+@dataclass(frozen=True)
+class TrainingTimeseriesConfig:    
+    root_dir: Path
+    trained_od_timeseries_model_path: Path    
+    base_od_timeseries_model_path: Path
+    trained_tensor_timeseries_model_path: Path    
+    base_tensor_timeseries_model_path: Path  
+    trained_od_autoencoder_model_path: Path
+    trained_tensor_autoencoder_model_path: Path   
+    training_od_data: Path    
+    training_tensor_data: Path    
+    params_epochs: int
+    params_batch_size: int   
+    learning_rate: float
+    validation_ratio: float
+    params_time_lag: int

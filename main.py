@@ -7,6 +7,8 @@ from timeseriesPredictor.pipeline.stage_03_prepare_cnn_autoencoder_base_model im
 from timeseriesPredictor.pipeline.stage_04_training_cnn_autoencoder import CNNAutoencoderModelTrainingPipeline
 from timeseriesPredictor.pipeline.stage_05_evaluating_cnn_autoencoder import CNNAutoencoderEvaluationPipeline
 from timeseriesPredictor.pipeline.stage_06_prepare_timeseries_base_model import PrepareTimeseriesBaseModelTrainingPipeline
+from timeseriesPredictor.pipeline.stage_07_training_timeseries_model import TimeseriesModelTrainingPipeline
+
 
 '''STAGE_NAME = "Data Ingestion Stage"
 
@@ -29,7 +31,7 @@ try:
     logging.info(f'>>>>>>> {STAGE_NAME} completed <<<<<<<<')
     
 except Exception as e:
-    raise CustomException(e, sys)'''
+    raise CustomException(e, sys)
 
 
 STAGE_NAME = "Prepare CNN Autoencoder Base Model Stage"
@@ -63,13 +65,24 @@ try:
     logging.info(f'>>>>>>> {STAGE_NAME} completed <<<<<<<<')
     
 except Exception as e:
-    raise CustomException(e, sys)
+    raise CustomException(e, sys)'''
 
 STAGE_NAME = "Prepare Timeseries Base Model Stage"
 
 try:
     logging.info(f'>>>>>>> {STAGE_NAME} started <<<<<<<<')
     obj = PrepareTimeseriesBaseModelTrainingPipeline()
+    obj.main()
+    logging.info(f'>>>>>>> {STAGE_NAME} completed <<<<<<<<')
+    
+except Exception as e:
+    raise CustomException(e, sys)
+
+STAGE_NAME = "Training Timeseries Model Stage"
+
+try:
+    logging.info(f'>>>>>>> {STAGE_NAME} started <<<<<<<<')
+    obj = TimeseriesModelTrainingPipeline()
     obj.main()
     logging.info(f'>>>>>>> {STAGE_NAME} completed <<<<<<<<')
     

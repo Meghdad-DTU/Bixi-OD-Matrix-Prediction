@@ -68,7 +68,8 @@ class PrepareTimeseriesBaseModel:
         model = keras.models.Model(inputs, x)
         model.compile(
             loss='mean_squared_error', 
-            optimizer=keras.optimizers.Adam(learning_rate=learning_rate)
+            optimizer=keras.optimizers.Adam(learning_rate=learning_rate),
+            metrics=['MSE']
             )        
         
         model.summary()
