@@ -77,7 +77,7 @@ class PrepareTimeseriesBaseModel:
     def update_model(self):
         
         autoencoder_pathes = [self.config.trained_od_autoencoder_path, self.config.trained_tensor_autoencoder_path]
-        model_pathes = [self.config.base_od_model_path, self.config.base_tensor_model_path]
+        model_pathes = [self.config.base_od_timeseries_model_path, self.config.base_tensor_timeseries_model_path]
         
         for autoencoder_path, model_path  in zip(autoencoder_pathes, model_pathes):
             row, col, channel =  self.get_encoder_layer_size(autoencoder_path).bottleneck_shape            

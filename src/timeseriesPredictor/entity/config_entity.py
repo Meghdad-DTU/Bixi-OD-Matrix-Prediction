@@ -67,8 +67,8 @@ class CNNAutoencoderEvaluationConfig:
 @dataclass(frozen=True)
 class PrepareTimeseriesBaseModelConfig:
     root_dir: Path
-    base_od_model_path: Path
-    base_tensor_model_path: Path
+    base_od_timeseries_model_path: Path
+    base_tensor_timeseries_model_path: Path
     trained_od_autoencoder_path: Path
     trained_tensor_autoencoder_path: Path
     params_learning_rate: float

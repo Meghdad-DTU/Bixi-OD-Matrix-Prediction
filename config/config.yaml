@@ -14,7 +14,6 @@ data_transformation:
   local_test_tensor_dir: artifacts/data_transformation/tensor/test.pkl
   local_scaler_tensor_dir: artifacts/data_transformation/tensor/scaler.pkl
 
-
 prepare_autoencoder_base_model:
   root_dir: artifacts/prepare_autoencoder_base_model
   base_od_model_path: artifacts/prepare_autoencoder_base_model/base_od_model.h5 
@@ -32,11 +31,11 @@ training_autoencoder:
 
 prepare_timeseries_base_model:
   root_dir: artifacts/prepare_timeseries_base_model
-  base_od_model_path: artifacts/prepare_timeseries_base_model/base_od_model.h5 
-  base_tensor_model_path: artifacts/prepare_timeseries_base_model/base_tensor_model.h5 
-
+  base_od_timeseries_model_path: artifacts/prepare_timeseries_base_model/base_od_model.h5 
+  base_tensor_timeseries_model_path: artifacts/prepare_timeseries_base_model/base_tensor_model.h5
 
 training_timeseries:
   root_dir: artifacts/training_timeseries
-  trained_od_model_path: artifacts/training_timeseries/od_model.h5
-  trained_tensor_model_path: artifacts/training_timeseries/tensor_model.h5
+  trained_od_timeseries_model_path: artifacts/training_timeseries/od_model.h5
+  trained_tensor_timeseries_model_path: artifacts/training_timeseries/tensor_model.h5
+  

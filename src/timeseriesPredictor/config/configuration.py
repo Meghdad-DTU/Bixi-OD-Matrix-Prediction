@@ -139,8 +139,8 @@ class configurationManeger:
 
         prepare_timeseries_base_model_config = PrepareTimeseriesBaseModelConfig(
             root_dir = config.root_dir,           
-            base_od_model_path = config.base_od_model_path,    
-            base_tensor_model_path = config.base_tensor_model_path,                   
+            base_od_timeseries_model_path = config.base_od_timeseries_model_path,    
+            base_tensor_timeseries_model_path = config.base_tensor_timeseries_model_path,                   
             trained_od_autoencoder_path = self.config.training_autoencoder.trained_od_model_path,
             trained_tensor_autoencoder_path= self.config.training_autoencoder.trained_tensor_model_path,
             params_learning_rate = self.params.LEARNING_RATE ,
