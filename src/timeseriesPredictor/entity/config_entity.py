@@ -90,3 +90,15 @@ class TrainingTimeseriesConfig:
     learning_rate: float
     validation_ratio: float
     params_time_lag: int
+
+@dataclass(frozen=True)
+class TimeseriesModelEvaluationConfig:
+    trained_od_timeseries_model_path: Path
+    trained_tensor_timeseries_model_path: Path 
+    trained_od_autoencoder_model_path: Path
+    trained_tensor_autoencoder_model_path: Path      
+    test_od_data: Path
+    test_tensor_data: Path 
+    scaler_od: Path
+    scaler_tensor: Path
+    params_time_lag: int

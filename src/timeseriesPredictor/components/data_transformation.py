@@ -6,7 +6,7 @@ from box import ConfigBox
 
 from sklearn.preprocessing import FunctionTransformer
 from sklearn.pipeline import Pipeline
-from sklearn.preprocessing import StandardScaler, MinMaxScaler
+from sklearn.preprocessing import MinMaxScaler
 
 from timeseriesPredictor.config.configuration import DataTransformationConfig
 from timeseriesPredictor.utils import OD_tensor_matrix, OD_tensor_matrix, train_test_split, save_pickle

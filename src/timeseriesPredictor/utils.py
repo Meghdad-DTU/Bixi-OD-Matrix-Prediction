@@ -256,12 +256,16 @@ def evaluate_forecasts(actual, predicted, text = "Test", plot=True):
     print("RMSEs: ", np.round(RMSEs,3))
 
     if plot:
-        plt.plot(np.arange(len(RMSEs)), RMSEs, label=True)
-        plt.plot(np.arange(len(MAEs)), MAEs, label=True)
-        plt.grid(linestyle="--")
-        plt.xlabel("Matrix cells")
-        plt.legend(["RMSE", "MAE"])
-        plt.title("Performance metrics for "+ text +" dataset")
+        plt.figure(figsize=(10,8))
+        plt.scatter(actual,predicted,alpha=.5,edgecolors='b')
+        plt.xlabel("Real data",fontsize=18)
+        plt.ylabel("Predicted data",fontsize=18)
+        plt.rcParams['xtick.labelsize']=15
+        plt.rcParams['ytick.labelsize']=15
+        plt.grid(alpha=.5,linestyle='--')
+        plt.plot(np.linspace(0,500,1000),np.linspace(0,500,1000),"r--",linewidth=2)
+        plt.xlim([0, 500])
+        plt.ylim([0, 500])
         plt.show()
 
     return overal_mae, MAEs, overal_rmse, RMSEs

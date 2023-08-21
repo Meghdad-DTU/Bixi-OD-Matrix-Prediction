@@ -23,8 +23,8 @@ class PrepareCNNAutoencoderBaseModel:
         
         inputs = keras.layers.Input(shape= input_shape, name='matrix_array') 
         # encoder
-        encoded = keras.layers.Convolution2D(filters=18, kernel_size=(3, 3), activation='relu', padding='same')(inputs)
-        encoded = keras.layers.Convolution2D(filters=3, kernel_size=(3, 3), activation='relu', padding='same')(encoded)        
+        encoded = keras.layers.Conv2D(filters=18, kernel_size=(3, 3), activation='relu', padding='same')(inputs)
+        encoded = keras.layers.Conv2D(filters=3, kernel_size=(3, 3), activation='relu', padding='same')(encoded)        
         encoded = keras.layers.BatchNormalization()(encoded)        
         encoded = keras.layers.MaxPooling2D(pool_size=(2, 2))(encoded)
         encoded = keras.layers.Dropout(0.25)(encoded)     
@@ -32,14 +32,14 @@ class PrepareCNNAutoencoderBaseModel:
         
         # decoder
         decoded = keras.layers.UpSampling2D(upsampling1)(bottleneck)        
-        decoded = keras.layers.Convolution2D(filters=18, kernel_size=(3, 3), activation='relu', padding='same')(decoded)
-        decoded = keras.layers.Convolution2D(filters=18, kernel_size=(3, 3), activation='relu', padding='same')(decoded)
+        decoded = keras.layers.Conv2D(filters=18, kernel_size=(3, 3), activation='relu', padding='same')(decoded)
+        decoded = keras.layers.Conv2D(filters=18, kernel_size=(3, 3), activation='relu', padding='same')(decoded)
         decoded = keras.layers.BatchNormalization()(decoded)             
         decoded = keras.layers.MaxPooling2D(pool_size=(2, 2), padding='same')(decoded)
         decoded = keras.layers.Dropout(0.25)(decoded)
         decoded = keras.layers.UpSampling2D(upsampling2)(decoded)        
 
-        decoded = keras.layers.Convolution2D(filters=1, kernel_size=(3, 3), activation='linear', padding='same', name='decoder')(decoded)      
+        decoded = keras.layers.Conv2D(filters=1, kernel_size=(3, 3), activation='linear', padding='same', name='decoder')(decoded)      
         autoencoder = keras.Model(inputs=inputs, outputs=decoded)           
 
         autoencoder.compile(

@@ -8,7 +8,8 @@ from timeseriesPredictor.entity.config_entity import (DataIngestionConfig,
                                                       TrainingCNNAutoencoderConfig,
                                                       CNNAutoencoderEvaluationConfig,
                                                       PrepareTimeseriesBaseModelConfig,
-                                                      TrainingTimeseriesConfig)
+                                                      TrainingTimeseriesConfig,
+                                                      TimeseriesModelEvaluationConfig)
                                                       
 
 class configurationManeger:
@@ -71,7 +72,7 @@ class configurationManeger:
             base_tensor_model_path = config.base_tensor_model_path,                   
             params_od_size = self.params.OD_SIZE,
             params_tensor_size= self.params.TENSOR_SIZE,
-            params_learning_rate = self.params.LEARNING_RATE,          
+            params_learning_rate = self.params.LEARNING_RATE_AUTOENCODER,          
 
         )
 
@@ -111,7 +112,7 @@ class configurationManeger:
         params_batch_size= self.params.BATCH_SIZE,      
         params_od_size= self.params.OD_SIZE,
         params_tensor_size=self.params.TENSOR_SIZE,
-        learning_rate= self.params.LEARNING_RATE,
+        learning_rate= self.params.LEARNING_RATE_AUTOENCODER,
         validation_ratio= self.params.VALIDATION_RATIO
         )
 
@@ -144,7 +145,7 @@ class configurationManeger:
             base_tensor_timeseries_model_path = config.base_tensor_timeseries_model_path,                   
             trained_od_autoencoder_path = self.config.training_autoencoder.trained_od_model_path,
             trained_tensor_autoencoder_path= self.config.training_autoencoder.trained_tensor_model_path,
-            params_learning_rate = self.params.LEARNING_RATE ,
+            params_learning_rate = self.params.LEARNING_RATE_TIMESERIES,
             params_time_lag = self.params.TIME_LAG                
 
         )
@@ -168,9 +169,26 @@ class configurationManeger:
         training_tensor_data= self.config.data_transformation.local_train_tensor_dir,        
         params_epochs= self.params.EPOCHS, 
         params_batch_size= self.params.BATCH_SIZE,         
-        learning_rate= self.params.LEARNING_RATE,
+        learning_rate= self.params.LEARNING_RATE_TIMESERIES,
         validation_ratio= self.params.VALIDATION_RATIO,
         params_time_lag= self.params.TIME_LAG
         )
 
         return training_timeseries_config
+    
+    def get_timeseries_evaluation_config(self) -> TimeseriesModelEvaluationConfig:        
+
+        timeseries_evaluation_config = TimeseriesModelEvaluationConfig(
+        trained_od_timeseries_model_path= self.config.training_timeseries.trained_od_timeseries_model_path,
+        trained_tensor_timeseries_model_path= self.config.training_timeseries.trained_tensor_timeseries_model_path, 
+        trained_od_autoencoder_model_path= self.config.training_autoencoder.trained_od_model_path,
+        trained_tensor_autoencoder_model_path= self.config.training_autoencoder.trained_tensor_model_path,
+        test_od_data = self.config.data_transformation.local_test_od_dir,
+        test_tensor_data = self.config.data_transformation.local_test_tensor_dir,
+        scaler_od= self.config.data_transformation.local_scaler_od_dir,
+        scaler_tensor= self.config.data_transformation.local_scaler_tensor_dir,
+        params_time_lag= self.params.TIME_LAG
+
+        )
+
+        return timeseries_evaluation_config

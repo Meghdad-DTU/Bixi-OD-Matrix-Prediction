@@ -25,8 +25,7 @@ list_of_files = [
     "params.yaml",
     "requirements.txt",
     "setup.py",
-    "research/trials.ipynb",
-    "templates/index.html"
+    "research/trials.ipynb"    
 ]
 
 for filepath in list_of_files:
